@@ -1,0 +1,62 @@
+import java.util.*;
+
+public class BobGrid {
+    static int N = 10;
+    static int M = 10;
+    static int[][] grid = new int[N][M];
+    static int[][] visited = new int[N][M];
+    static int[] x_moves = {-1, 0, 1, -1, 1, -1, 0, 1};
+    static int[] y_moves = {-1, -1, -1, 0, 0, 1, 1, 1};
+    static int count = 0;
+    
+    public static void main(String[] args) {
+        //initializing grid
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                grid[i][j] = 0;
+            }
+        }
+        
+        //setting blocked blocks
+        grid[1][2] = 1;
+        grid[3][3] = 1;
+        grid[4][7] = 1;
+        grid[7][4] = 1;
+        grid[8][8] = 1;
+        
+        //setting Bob's position
+        int x = 9;
+        int y = 3;
+        
+        //calling BFS
+        bfs(x, y);
+        
+        //printing result
+        System.out.println("Number of possible positions Bob can move: " + count);
+    }
+    
+    public static void bfs(int x, int y) {
+        Queue<Integer> q = new LinkedList<>();
+        q.add(x);
+        q.add(y);
+        visited[x][y] = 1;
+        count++;
+        
+        while (!q.isEmpty()) {
+            int x_curr = q.remove();
+            int y_curr = q.remove();
+            
+            for (int i = 0; i < 8; i++) {
+                int x_next = x_curr + x_moves[i];
+                int y_next = y_curr + y_moves[i];
+                
+                if (x_next >= 0 && x_next < N && y_next >= 0 && y_next < M && grid[x_next][y_next] == 0 && visited[x_next][y_next] == 0) {
+                    q.add(x_next);
+                    q.add(y_next);
+                    visited[x_next][y_next] = 1;
+                    count++;
+                }
+            }
+        }
+    }
+}
